@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gospel Vault</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: Arial; padding: 15px; }
+    h2 { color: #2c7be5; }
+    input, button { padding: 8px; margin-top: 5px; display: block; width: 100%; max-width: 300px; }
+    hr { margin: 20px 0; }
+  </style>
+</head>
+<body>
+
+<h2>🎵 Gospel Vault</h2>
+
+<input type="text" id="title" placeholder="Song Title">
+<input type="text" id="artist" placeholder="Artist Name">
+<input type="file" id="songFile">
+<button onclick="uploadSong()">Upload Song</button>
+
+<hr>
+
+<h3>Available Songs</h3>
+<ul id="songs"></ul>
+
+<script>
+  // 🔑 Replace these with YOUR Supabase keys
+  const supabaseUrl = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2bm5pc2dhd3loamV4dG5vd3NnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY2OTA5MDQsImV4cCI6MjA4MjI2NjkwNH0.kdW4H6E00DljQoetYICAc4kKR-arVGmOhm6c0N0814M;
+  const supabaseKey = sb_publishable_dwu8xCwXSZ676XHHylI3vQ_8GUhiwhy<!DOCTYPE html>
+<html>
+<head>
+  <title>Gospel Vault</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: Arial; padding: 15px; }
+    h2 { color: #2c7be5; }
+    input, button { padding: 8px; margin-top: 5px; display: block; width: 100%; max-width: 300px; }
+    hr { margin: 20px 0; }
+  </style>
+</head>
+<body>
+
+<h2>🎵 Gospel Vault</h2>
+
+<input type="text" id="title" placeholder="Song Title">
+<input type="text" id="artist" placeholder="Artist Name">
+<input type="file" id="songFile">
+<button onclick="uploadSong()">Upload Song</button>
+
+<hr>
+
+<h3>Available Songs</h3>
+<ul id="songs"></ul>
+
+<script>
+  // 🔑 Replace these with YOUR Supabase keys
+  const supabaseUrl = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2bm5pc2dhd3loamV4dG5vd3NnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY2OTA5MDQsImV4cCI6MjA4MjI2NjkwNH0.kdW4H6E00DljQoetYICAc4kKR-arVGmOhm6c0N0814M;
+  const supabaseKey = sb_publishable_dwu8xCwXSZ676XHHylI3vQ_8GUhiwhy;
+
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function uploadSong() {
+    const file = document.getElementById("songFile").files[0];
+    const title = document.getElementById("title").value;
+    const artist = document.getElementById("artist").value;
+
+    if (!file || !title) {
+      alert("Please select a song and title");
+      return;
+    }
+
+    const filePath = Date.now() + "_" + file.name;
+
+    // Upload to Supabase storage
+    const { error: uploadError } = await supabase.storage
+      .from("songs")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      alert("Upload failed: " + uploadError.message);
+      return;
+    }
+
+    const { data } = supabase.storage
+      .from("songs")
+      .getPublicUrl(filePath);
+
+    // Insert record into Supabase table
+    const { error: insertError } = await supabase.from("songs").insert({
+      title: title,
+      artist: artist,
+      file_url: data.publicUrl
+    });
+
+    if (insertError) {
+      alert("Database insert failed: " + insertError.message);
+      return;
+    }
+
+    alert("Song uploaded!");
+    loadSongs();
+  }
+
+  async function loadSongs() {
+    const { data, error } = await supabase.from("songs").select("*");
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const list = document.getElementById("songs");
+    list.innerHTML = "";
+
+    data.forEach(song => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${song.title}</strong> by ${song.artist || "Unknown"} <br>
+                      <a href="${song.file_url}" download>Download</a>`;
+      list.appendChild(li);
+    });
+  }
+
+  loadSongs();
+</script>
+
+</body>
+</html>;
+
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function uploadSong() {
+    const file = document.getElementById("songFile").files[0];
+    const title = document.getElementById("title").value;
+    const artist = document.getElementById("artist").value;
+
+    if (!file || !title) {
+      alert("Please select a song and title");
+      return;
+    }
+
+    const filePath = Date.now() + "_" + file.name;
+
+    // Upload to Supabase storage
+    const { error: uploadError } = await supabase.storage
+      .from("songs")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      alert("Upload failed: " + uploadError.message);
+      return;
+    }
+
+    const { data } = supabase.storage
+      .from("songs")
+      .getPublicUrl(filePath);
+
+    // Insert record into Supabase table
+    const { error: insertError } = await supabase.from("songs").insert({
+      title: title,
+      artist: artist,
+      file_url: data.publicUrl
+    });
+
+    if (insertError) {
+      alert("Database insert failed: " + insertError.message);
+      return;
+    }
+
+    alert("Song uploaded!");
+    loadSongs();
+  }
+
+  async function loadSongs() {
+    const { data, error } = await supabase.from("songs").select("*");
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const list = document.getElementById("songs");
+    list.innerHTML = "";
+
+    data.forEach(song => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${song.title}</strong> by ${song.artist || "Unknown"} <br>
+                      <a href="${song.file_url}" download>Download</a>`;
+      list.appendChild(li);
+    });
+  }
+
+  loadSongs();
+</script>
+
+</body>
+</html>
